@@ -12,12 +12,13 @@ inline — siempre trabajan sobre archivos en almacenamiento.
 
 import os
 import time
+from pathlib import Path
 
 import requests
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 REST_ENDPOINT = os.environ["AZURE_ML_REST_ENDPOINT"]
 DEPLOYMENT_NAME = os.environ.get("BATCH_DEPLOYMENT_NAME")

@@ -5,7 +5,7 @@ A diferencia del batch endpoint, aquí enviamos un POST HTTP con un payload JSON
 y recibimos las predicciones inmediatamente (~50-200 ms).
 
 Uso:
-  python consumir_realtime_endpoint.py
+  python online/consumir_realtime_endpoint.py   (desde la raíz de la carpeta)
 """
 
 import json
@@ -17,13 +17,14 @@ import pandas as pd
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()
+RAIZ = Path(__file__).resolve().parent.parent
+load_dotenv(RAIZ / ".env")
 
 ENDPOINT_URL = os.environ["ONLINE_ENDPOINT_URL"]
 ENDPOINT_KEY = os.environ["ONLINE_ENDPOINT_KEY"]
 DEPLOYMENT_NAME = os.environ.get("ONLINE_DEPLOYMENT_NAME")
 
-ARCHIVO_ENTRADA = Path(__file__).parent / "datos" / "datos_entrada.csv"
+ARCHIVO_ENTRADA = RAIZ / "datos" / "datos_entrada.csv"
 
 
 def construir_payload() -> dict:

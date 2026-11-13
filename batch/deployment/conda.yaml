@@ -1,0 +1,18 @@
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip=24.0
+  - pip:
+      - mlflow==2.15.1
+      - mlflow-skinny==2.15.1
+      - azureml-mlflow==1.61.0.post1
+      - azureml-defaults==1.61.0
+      - azureml-inference-server-http==1.5.1
+      - scikit-learn==1.5.1
+      - pandas==1.5.3
+      - numpy==1.23.5
+      - joblib==1.2.0
+      - cloudpickle==2.2.1
+      - psutil==5.9.3
+name: env_batch_salud

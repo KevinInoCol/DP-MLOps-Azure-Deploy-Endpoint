@@ -2,7 +2,7 @@
 Interfaz Streamlit para consumir el online endpoint del modelo VotingEnsemble.
 
 No reimplementa la llamada HTTP: importa `invocar()` de
-`consumir_realtime_endpoint.py`, que ya construye los headers (incluido
+`online/consumir_realtime_endpoint.py`, que ya construye los headers (incluido
 `azureml-model-deployment`) y mide la latencia. Esta capa solo arma el payload
 desde el formulario o desde un CSV y presenta el resultado.
 
@@ -20,9 +20,9 @@ import pandas as pd
 import streamlit as st
 from dotenv import load_dotenv
 
-from consumir_realtime_endpoint import invocar
+from online.consumir_realtime_endpoint import invocar
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent / ".env")
 
 ONLINE_ENDPOINT_URL = os.getenv("ONLINE_ENDPOINT_URL")
 ONLINE_ENDPOINT_KEY = os.getenv("ONLINE_ENDPOINT_KEY")

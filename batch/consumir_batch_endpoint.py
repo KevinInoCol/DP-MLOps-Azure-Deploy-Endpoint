@@ -2,8 +2,8 @@
 Consumo de un Batch Endpoint en Azure Machine Learning usando el SDK v2.
 
 Uso:
-  python consumir_batch_endpoint.py             # crea un job nuevo y lo monitorea
-  python consumir_batch_endpoint.py <job_name>  # monitorea un job ya existente
+  python batch/consumir_batch_endpoint.py             # crea un job nuevo y lo monitorea
+  python batch/consumir_batch_endpoint.py <job_name>  # monitorea un job ya existente
 """
 
 import os
@@ -15,7 +15,8 @@ from azure.ai.ml.constants import AssetTypes
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-load_dotenv()
+RAIZ = Path(__file__).resolve().parent.parent
+load_dotenv(RAIZ / ".env")
 
 SUBSCRIPTION_ID = os.environ["AZURE_SUBSCRIPTION_ID"]
 RESOURCE_GROUP = os.environ["AZURE_RESOURCE_GROUP"]
@@ -23,8 +24,8 @@ WORKSPACE_NAME = os.environ["AZURE_WORKSPACE_NAME"]
 ENDPOINT_NAME = os.environ.get("BATCH_ENDPOINT_NAME", "modelo-voting-ensemble-batch")
 DEPLOYMENT_NAME = os.environ.get("BATCH_DEPLOYMENT_NAME")
 
-ARCHIVO_ENTRADA = Path(__file__).parent / "datos" / "datos_entrada.csv"
-CARPETA_SALIDA = Path(__file__).parent / "predicciones"
+ARCHIVO_ENTRADA = RAIZ / "datos" / "datos_entrada.csv"
+CARPETA_SALIDA = RAIZ / "salida"
 
 
 def construir_cliente() -> MLClient:

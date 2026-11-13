@@ -23,7 +23,7 @@ from azure.ai.ml.entities import (
 from azure.identity import DefaultAzureCredential
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 SUBSCRIPTION_ID = os.environ["AZURE_SUBSCRIPTION_ID"]
 RESOURCE_GROUP = os.environ["AZURE_RESOURCE_GROUP"]
@@ -36,8 +36,8 @@ MODEL_VERSION = "1"
 COMPUTE_NAME = "cluster-aml-salud"
 
 ROOT = Path(__file__).parent
-ENV_FILE = ROOT / "deployment_files" / "environment" / "conda.yaml"
-CODE_DIR = ROOT / "deployment_files" / "code"
+ENV_FILE = ROOT / "deployment" / "conda.yaml"
+CODE_DIR = ROOT / "deployment"
 
 
 def construir_cliente() -> MLClient:
@@ -114,7 +114,7 @@ def main() -> None:
     hacer_default(ml)
     print()
     print("Listo. Ahora ejecuta:")
-    print("  python consumir_batch_endpoint.py")
+    print("  python batch/consumir_batch_endpoint.py")
 
 
 if __name__ == "__main__":

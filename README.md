@@ -9,25 +9,42 @@ El mejor modelo del experimento fue un **VotingEnsemble**
 
 DataPath — MLOps, Módulo 3 Sesión 6.
 
-## Interfaz
+## Estructura
 
-```bash
-streamlit run app_streamlit.py
+```
+Consumo-Modelo-Endpoint-Voting-Ensemble/
+├── app_streamlit.py              # Interfaz web sobre el online endpoint
+├── online/
+│   └── consumir_realtime_endpoint.py   # POST al online endpoint (~50-400 ms)
+├── batch/
+│   ├── consumir_batch_endpoint.py      # Batch endpoint vía SDK v2: crea un job y lo monitorea
+│   ├── consumir_rest_api.py            # Batch endpoint vía REST API, sin SDK
+│   ├── recrear_batch_deployment.py     # Recrea la batch deployment con un environment custom
+│   └── deployment/
+│       ├── score.py                    # Scoring script de la batch deployment
+│       └── conda.yaml                  # Environment mínimo (sin el stack de AutoML)
+├── datos/
+│   ├── datos_entrada.csv         # 20 filas de ejemplo para inferir
+│   └── insurance.csv             # Dataset de entrenamiento (n=1338)
+├── requirements.txt
+├── .env.example                  # Plantilla → copiar a .env
+└── .gitignore
 ```
 
-Dos modos: predicción individual con formulario, y predicción por lote desde un
-CSV con descarga de resultados. La app no reimplementa la llamada HTTP: importa
-`invocar()` de `consumir_realtime_endpoint.py`.
+Todos los comandos se ejecutan **desde la raíz de esta carpeta**; cada script
+lee el `.env` de la raíz, no importa desde dónde se lance.
 
-## Scripts
+## Uso
 
-| Archivo | Qué hace |
-| --- | --- |
-| `app_streamlit.py` | Interfaz web sobre el online endpoint |
-| `consumir_realtime_endpoint.py` | POST al online endpoint, respuesta inmediata (~50-200 ms) |
-| `consumir_batch_endpoint.py` | Batch endpoint vía SDK v2: crea un job y lo monitorea |
-| `consumir_rest_api.py` | Batch endpoint vía REST API, sin SDK |
-| `recrear_batch_deployment.py` | Recrea la batch deployment con un environment custom |
+```bash
+streamlit run app_streamlit.py               # interfaz web
+python online/consumir_realtime_endpoint.py  # prueba rápida por consola
+python batch/consumir_batch_endpoint.py      # job batch (necesita BATCH_* en .env)
+```
+
+La app tiene dos modos: predicción individual con formulario, y predicción por
+lote desde un CSV con descarga de resultados. No reimplementa la llamada HTTP:
+importa `invocar()` de `online/consumir_realtime_endpoint.py`.
 
 Los batch endpoints **no aceptan payloads inline**: siempre operan sobre
 archivos en un datastore o Data Asset registrado.
@@ -49,6 +66,11 @@ El scoring script auto-generado por AutoML espera el orient `split` de pandas:
 ## Setup
 
 ```bash
+# Azure CLI (una vez por computadora; en Mac con Homebrew) y login
+brew install azure-cli
+az login
+
+# Entorno de Python 3.11
 conda create -n MLOps-AZURE-Consumo-Endpoint python=3.11 -y
 conda activate MLOps-AZURE-Consumo-Endpoint
 pip install -r requirements.txt
